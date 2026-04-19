@@ -1,8 +1,7 @@
 {
   "kits": {
-
     "HPV Basic Panel": {
-      "kit_name": "HPV Basic Panel v1",
+      "kit_name": "HPV Basic Panel",
       "manufacturer": "Bionan Ltd.",
       "catalog_number": "1979225-23",
       "targets": {
@@ -53,7 +52,7 @@
           "interpretation": "positive_if_amplified"
         },
         "VIC": {
-          "target_name": "RNase P",
+          "target_name": "IC",
           "type": "internal_control",
           "interpretation": "positive_if_amplified"
         },
@@ -76,7 +75,7 @@
             "Influenza A": true,
             "Influenza B": true,
             "Sars-Cov2": true,
-            "RNase P": true
+            "IC": true
           }
         },
         "PK": {
@@ -84,80 +83,12 @@
             "Influenza A": false,
             "Influenza B": false,
             "Sars-Cov2": false,
-            "RNase P": true
-          }
-        }
-      },
-      "sample_result": {
-        "invalid minta": {
-          "rules": {
-            "Influenza A": true,
-            "Influenza B": true,
-            "Sars-Cov2": true,
-            "RNase P": true
-          }
-        },
-        "negatív minta": {
-          "rules": {
-            "Influenza A": true,
-            "Influenza B": true,
-            "Sars-Cov2": true,
-            "RNase P": false
-          }
-        },
-        "pozitív minta": {
-          "Influenza A": {
-            "rules": {
-              "Influenza A": false,
-              "Influenza B": true,
-              "Sars-Cov2": true
-            }
-          },
-          "Influenza B": {
-            "rules": {
-              "Influenza A": true,
-              "Influenza B": false,
-              "Sars-Cov2": true
-            }
-          },
-          "Influenza A és B": {
-            "rules": {
-              "Influenza A": false,
-              "Influenza B": false,
-              "Sars-Cov2": true
-            }
-          },
-          "Influenza A és B, Sars-CoV2": {
-            "rules": {
-              "Influenza A": false,
-              "Influenza B": false,
-              "Sars-Cov2": false
-            }
-          },
-          "Sars-CoV2": {
-            "rules": {
-              "Influenza A": true,
-              "Influenza B": true,
-              "Sars-Cov2": false
-            }
-          },
-          "Influenza A, Sars-CoV2" : {
-            "rules": {
-              "Influenza A": false,
-              "Influenza B": true,
-              "Sars-Cov2": false
-            }
-          },
-          "Influenza B, Sars-CoV2": {
-            "rules": {
-              "Influenza A": false,
-              "Influenza B": true,
-              "Sars-Cov2": false
-            }
+            "IC": true
           }
         }
       }
     }
+
   }
 }
 

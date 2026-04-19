@@ -77,15 +77,15 @@ def evaluate_control(sample_id: str,
             others_negative = all(neg_flags.get(t, True) for t in non_ic_targets)
 
             if ic_positive and others_negative:
-                return True, "Valid PrepNTC"
+                return True, "Valid Prep_NTC"
             else:
-                return False, "Invalid PrepNTC"
+                return False, "Invalid Prep_NTC"
         else:
             # Nincs IC a kitben → minden targetnek negatívnak kell lennie
             if all(neg_flags.get(t, False) for t in neg_flags):
                 return True, "Valid PrepNTC (IC nélkül)"
             else:
-                return False, "Invalid PrepNTC"
+                return False, "Invalid Prep_NTC"
 
     # Ismeretlen kontroll típus
     return False, f"Ismeretlen kontroll: {sample_id}"
@@ -171,21 +171,8 @@ def evaluate_samples(file,
     controls = selected_kit.get("controls", {})
     sample_result_rules = selected_kit.get("sample_result", {})
 
-    # IC targetnevek kinyerése a JSON type mező alapján
+    # IC targetnevek kinyerése a JSON type mező alapján - nincs hardcoded név
     ic_targets = get_targets_by_type(kit_targets, "internal_control")
-
-    # --- Flag aggregálása well/well_position szinten ---
-    # Ha bármelyik csatornában True a flag → "manuális értékelést igényel"
-    if "flag" in pcr_result.columns:
-        flag_map = (
-            pcr_result
-            .groupby([well_col, well_position_col])["flag"]
-            .any()
-            .reset_index()
-            .rename(columns={"flag": "_flag_any"})
-        )
-    else:
-        flag_map = None
 
     # --- Segédfüggvények ---
     def is_negative(v):
@@ -234,16 +221,4 @@ def evaluate_samples(file,
             'valid': valid
         })
 
-    final_df = pd.DataFrame(final_rows)
-
-    # --- Flag oszlop hozzáadása ---
-    if flag_map is not None:
-        final_df = final_df.merge(flag_map, on=[well_col, well_position_col], how="left")
-        final_df["flag"] = final_df["_flag_any"].apply(
-            lambda x: "manuális értékelést igényel" if x else ""
-        )
-        final_df = final_df.drop(columns=["_flag_any"])
-    else:
-        final_df["flag"] = ""
-
-    return final_df
+    return pd.DataFrame(final_rows)

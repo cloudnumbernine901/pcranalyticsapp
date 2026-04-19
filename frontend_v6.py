@@ -100,7 +100,7 @@ def render_modify_panel(selected_well, selected_row, overrides, kit_name, accept
 
     col_save, col_reset = st.columns(2)
     with col_save:
-        if st.button("Mentés", key=f"save_{selected_well}", width='stretch'):
+        if st.button("Mentés", key=f"save_{selected_well}", use_container_width=True):
             if not new_indok.strip():
                 st.error("A módosítás indoka kötelező!")
             else:
@@ -116,7 +116,7 @@ def render_modify_panel(selected_well, selected_row, overrides, kit_name, accept
                 st.success("Módosítás elmentve!")
                 st.rerun()
     with col_reset:
-        if st.button("Visszaállítás", key=f"reset_{selected_well}", width='stretch'):
+        if st.button("Visszaállítás", key=f"reset_{selected_well}", use_container_width=True):
             st.session_state["manual_overrides"].pop(selected_well, None)
             if selected_well in st.session_state[accepted_wells_key]:
                 st.session_state[accepted_wells_key].remove(selected_well)
@@ -142,24 +142,22 @@ st.sidebar.header("Menü")
 
 with st.sidebar.expander("Bemeneti adatok", expanded=True):
     st.radio(
-        "Bemeneti adatok",
+        "",
         INPUT_OPTIONS,
         index=INPUT_OPTIONS.index(st.session_state["input"])
         if st.session_state["input"] in INPUT_OPTIONS else None,
         key="input",
-        on_change=on_input_change,
-        label_visibility="collapsed"
+        on_change=on_input_change
     )
 
 with st.sidebar.expander("Eredmények", expanded=True):
     st.radio(
-        "Eredmények",
+        "",
         RESULT_OPTIONS,
         index=RESULT_OPTIONS.index(st.session_state["results"])
         if st.session_state["results"] in RESULT_OPTIONS else None,
         key="results",
-        on_change=on_results_change,
-        label_visibility="collapsed"
+        on_change=on_results_change
     )
 
 selected_view = st.session_state.get("active_view")
@@ -257,7 +255,7 @@ elif selected_view == "Futási file":
     df = st.session_state.get("raw_df")
     if df is not None:
         st.subheader("Nyers adatok (előnézet)")
-        st.dataframe(df.head(200), width='stretch')
+        st.dataframe(df.head(200), use_container_width=True)
 
         # opcionális: csatornák kijelzése
         if st.session_state.get("channels") is not None:
@@ -421,7 +419,7 @@ elif selected_view == "Minta azonosítók":
         )
 
         if uploaded_sample_file is not None:
-            if st.button("Feltöltött Excel beolvasása", width='stretch'):
+            if st.button("Feltöltött Excel beolvasása", use_container_width=True):
                 load_excel_sample_ids(uploaded_sample_file)
 
     st.divider()
@@ -448,7 +446,7 @@ elif selected_view == "Minta azonosítók":
 
     edited_grid = st.data_editor(
         editable_grid,
-        width='stretch',
+        use_container_width=True,
         num_rows="fixed",
         key="sample_id_plate_editor"
         )
@@ -456,7 +454,7 @@ elif selected_view == "Minta azonosítók":
     col1, col2 = st.columns(2)
 
     with col1:
-        if st.button("Grid módosítások mentése", width='stretch'):
+        if st.button("Grid módosítások mentése", use_container_width=True):
             try:
                 updated_sample_id_df = grid_to_sample_id_df(edited_grid)
                 st.session_state["sample_id_df"] = updated_sample_id_df
@@ -466,7 +464,7 @@ elif selected_view == "Minta azonosítók":
                 st.error(f"A grid mentése nem sikerült: {e}")
 
     with col2:
-        if st.button("Grid kiürítése", width='stretch'):
+        if st.button("Grid kiürítése", use_container_width=True):
             st.session_state["sample_id_df"] = grid_to_sample_id_df(create_empty_plate_grid())
             st.success("A 384 grid kiürítve.")
             st.rerun()
@@ -623,7 +621,7 @@ elif selected_view == "Összefoglaló":
     if eds_ready and kit_ready and samples_ready:
         st.success("Minden kötelező adat rendelkezésre áll.")
         
-        if st.button("ADATOK VÉGLEGESÍTÉSE ÉS ELEMZÉS INDÍTÁSA", type="primary", width='stretch'):
+        if st.button("ADATOK VÉGLEGESÍTÉSE ÉS ELEMZÉS INDÍTÁSA", type="primary", use_container_width=True):
             from app.pcr.finalize_plate_layout import finalize_plate_layout
             
             # Layout összefűzése
@@ -684,7 +682,7 @@ elif selected_view == "Kontrollok eredményei":
 
                 ctrl_selection = st.dataframe(
                     df_controls_display,
-                    width='stretch',
+                    use_container_width=True,
                     hide_index=True,
                     on_select="rerun",
                     selection_mode="single-row",
@@ -693,7 +691,7 @@ elif selected_view == "Kontrollok eredményei":
 
                 col_ctrl_unaccept, _ = st.columns([1, 3])
                 with col_ctrl_unaccept:
-                    if st.button("↩️ Összes elfogadás visszavonása", width='stretch'):
+                    if st.button("↩️ Összes elfogadás visszavonása", use_container_width=True):
                         st.session_state["control_accepted_wells"] = []
                         st.success("Összes kontroll elfogadás visszavonva!")
                         st.rerun()
@@ -723,7 +721,7 @@ elif selected_view == "Kontrollok eredményei":
                                 control_name=ctrl_sample_id
                             )
                             if fig_controls is not None:
-                                st.plotly_chart(fig_controls, width='stretch')
+                                st.plotly_chart(fig_controls, use_container_width=True)
                             else:
                                 st.info("A vizualizáció nem elérhető.")
                         except Exception as e:
@@ -746,7 +744,7 @@ elif selected_view == "Kontrollok eredményei":
                             is_ctrl_accepted = ctrl_well in ctrl_accepted
                             if not is_ctrl_accepted:
                                 if st.button("Elfogadás mentése", key=f"ctrl_accept_{ctrl_well}",
-                                             width='stretch'):
+                                             use_container_width=True):
                                     if ctrl_well not in st.session_state["control_accepted_wells"]:
                                         st.session_state["control_accepted_wells"].append(ctrl_well)
                                     st.session_state["control_overrides"].pop(ctrl_well, None)
@@ -755,7 +753,7 @@ elif selected_view == "Kontrollok eredményei":
                             else:
                                 st.success(f"✅ Elfogadva")
                                 if st.button("↩️ Elfogadás visszavonása", key=f"ctrl_unaccept_{ctrl_well}",
-                                             width='stretch'):
+                                             use_container_width=True):
                                     st.session_state["control_accepted_wells"].remove(ctrl_well)
                                     st.rerun()
 
@@ -785,7 +783,7 @@ elif selected_view == "Kontrollok eredményei":
                             col_save, col_reset = st.columns(2)
                             with col_save:
                                 if st.button("Mentés", key=f"ctrl_save_{ctrl_well}",
-                                             width='stretch'):
+                                             use_container_width=True):
                                     if not new_indok.strip():
                                         st.error("A módosítás indoka kötelező!")
                                     else:
@@ -799,7 +797,7 @@ elif selected_view == "Kontrollok eredményei":
                                         st.rerun()
                             with col_reset:
                                 if st.button("Visszaállítás", key=f"ctrl_reset_{ctrl_well}",
-                                             width='stretch'):
+                                             use_container_width=True):
                                     st.session_state["control_overrides"].pop(ctrl_well, None)
                                     st.success("Eredeti érték visszaállítva!")
                                     st.rerun()
@@ -940,7 +938,7 @@ elif selected_view == "PCR görbe megjelenítés":
 
                 # Kattintás figyelése
                 # FONTOS: Nem használunk manuális st.rerun()-t a blokkon belül!
-                event = st.plotly_chart(fig_grid, on_select="rerun", width='stretch', key="plate_chart")
+                event = st.plotly_chart(fig_grid, on_select="rerun", use_container_width=True, key="plate_chart")
 
                 # Ha a felhasználó kattintott, frissítjük a session state-et
                 if event and "selection" in event and event["selection"]["points"]:
@@ -965,7 +963,7 @@ elif selected_view == "PCR görbe megjelenítés":
                         file_buf_viz = io.BytesIO(eds_bytes)
                         fig_s = visual_samples(file_buf_viz, backend_layout, kit_name, current_well)
                         if fig_s:
-                            st.plotly_chart(fig_s, width='stretch')
+                            st.plotly_chart(fig_s, use_container_width=True)
                     except Exception as e:
                         st.error(f"Hiba a görbe megjelenítésekor: {e}")
                 else:
@@ -980,7 +978,7 @@ elif selected_view == "PCR görbe megjelenítés":
                         title="Minden minta és kontroll", template="plotly_white"
                     )
                     fig_all.update_layout(showlegend=False)
-                    st.plotly_chart(fig_all, width='stretch')
+                    st.plotly_chart(fig_all, use_container_width=True)
 
 
 # ==============================
@@ -1081,7 +1079,7 @@ elif selected_view == "Táblázatos megjelenítés":
         # Egyetlen táblázat – sorkijelöléssel
         selection = st.dataframe(
             df_filtered,
-            width='stretch',
+            use_container_width=True,
             hide_index=True,
             on_select="rerun",
             selection_mode="single-row",
@@ -1091,7 +1089,7 @@ elif selected_view == "Táblázatos megjelenítés":
         # Összes validálható sor validálása / visszavonása
         col_val_all, col_unval_all, _ = st.columns([1, 1, 3])
         with col_val_all:
-            if st.button("☑ Összes validálása", width='stretch'):
+            if st.button("☑ Összes validálása", use_container_width=True):
                 from datetime import datetime
                 now = datetime.now().strftime("%Y.%m.%d. %H:%M")
                 for wp in validalhato_wells:
@@ -1099,7 +1097,7 @@ elif selected_view == "Táblázatos megjelenítés":
                 st.success(f"{len(validalhato_wells)} sor sikeresen validálva ({now})!")
                 st.rerun()
         with col_unval_all:
-            if st.button("↩️ Összes visszavonása", width='stretch'):
+            if st.button("↩️ Összes visszavonása", use_container_width=True):
                 st.session_state["validated_wells"] = {}
                 st.session_state["full_results"] = None
                 st.success("Összes validálás visszavonva!")
@@ -1121,7 +1119,7 @@ elif selected_view == "Táblázatos megjelenítés":
             col_val, col_unval, _ = st.columns([1, 1, 3])
             with col_val:
                 if is_validalhato and not is_validated:
-                    if st.button("✅ Sor validálása", width='stretch', type="primary"):
+                    if st.button("✅ Sor validálása", use_container_width=True, type="primary"):
                         from datetime import datetime
                         now = datetime.now().strftime("%Y.%m.%d. %H:%M")
                         st.session_state["validated_wells"][selected_well] = now
@@ -1133,7 +1131,7 @@ elif selected_view == "Táblázatos megjelenítés":
                     st.warning("⚠️ Előbb döntsd el a flag-et")
             with col_unval:
                 if is_validated:
-                    if st.button("↩️ Visszavonás", width='stretch'):
+                    if st.button("↩️ Visszavonás", use_container_width=True):
                         del st.session_state["validated_wells"][selected_well]
                         st.session_state["full_results"] = None
                         st.rerun()
@@ -1153,7 +1151,7 @@ elif selected_view == "Táblázatos megjelenítés":
                         well_position=selected_well
                     )
                     if fig:
-                        st.plotly_chart(fig, width='stretch')
+                        st.plotly_chart(fig, use_container_width=True)
                 except Exception as e:
                     st.error(f"Hiba a görbe betöltésekor: {e}")
 
@@ -1170,7 +1168,7 @@ elif selected_view == "Táblázatos megjelenítés":
                     )
 
                     if action == "Elfogad":
-                        if st.button("Elfogadás mentése", key=f"accept_{selected_well}", width='stretch'):
+                        if st.button("Elfogadás mentése", key=f"accept_{selected_well}", use_container_width=True):
                             if selected_well not in st.session_state["accepted_wells"]: st.session_state["accepted_wells"].append(selected_well)
                             # override-ból töröljük ha volt korábbi módosítás
                             st.session_state["manual_overrides"].pop(selected_well, None)
@@ -1307,7 +1305,7 @@ elif selected_view == "Export":
                 st.warning("A szűrés után nincs megjeleníthető vagy exportálható adat.")
             elif selected_columns:
                 preview_df = export_df[selected_columns].copy()
-                st.dataframe(preview_df, width='stretch')
+                st.dataframe(preview_df, use_container_width=True)
 
                 file_data, file_name, mime = build_export_file(
                     df=export_df,
@@ -1320,7 +1318,7 @@ elif selected_view == "Export":
                     data=file_data,
                     file_name=file_name,
                     mime=mime,
-                    width='stretch'
+                    use_container_width=True
                 )
             else:
                 st.info("Válassz ki legalább egy oszlopot az előnézethez és exporthoz.")
