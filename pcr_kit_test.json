@@ -1,7 +1,7 @@
 {
   "kits": {
 
-    "HPV Basic Panel": {
+    "HPV kit": {
       "kit_name": "HPV Basic Panel v1",
       "manufacturer": "Bionan Ltd.",
       "catalog_number": "1979225-23",
@@ -41,21 +41,21 @@
         }
       },
       "sample_result": {
-        "invalid": {
+        "invalid minta": {
           "rules": {
             "HPV 16": true,
             "HPV 18": true,
             "IC": true
           }
         },
-        "negatív": {
+        "negatív minta": {
           "rules": {
             "HPV 16": true,
             "HPV 18": true,
             "IC": false
           }
         },
-        "pozitív": {
+        "pozitív minta": {
           "HPV 16": {
             "rules": {
               "HPV 16": false,
@@ -68,7 +68,7 @@
               "HPV 18": false
             }
           },
-          "HPV 16 18": {
+          "HPV 16, 18": {
             "rules": {
               "HPV 16": false,
               "HPV 18": false
@@ -78,7 +78,7 @@
       }
     },
 
-    "Respiratory Panel (SarsCov2 + Influenza)": {
+    "Léguti kit": {
       "kit_name": "Respiratory Panel (SarsCov2 + InfluenzaA és B)",
       "manufacturer": "BioLab Ltd.",
       "catalog_number": "197912-09",
