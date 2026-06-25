@@ -81,10 +81,9 @@ def render_modify_panel(selected_well, selected_row, overrides, kit_name, accept
     current_override = overrides.get(selected_well, {})
     current_final  = current_override.get("final_result", str(selected_row.get("final_result", "")))
     current_target = current_override.get("target",       str(selected_row.get("target", "")))
-    current_ct     = current_override.get("ct",           str(selected_row.get("ct", "")))
     current_indok  = current_override.get("módosítás indoka", "")
 
-    final_options = ["negatív", "pozitív"]
+    final_options = ["negatív", "pozitív", "invalid"]
     final_index = final_options.index(current_final) if current_final in final_options else 0
     new_final = st.selectbox("final_result", options=final_options, index=final_index,
                               key=f"edit_final_{selected_well}")
@@ -94,7 +93,7 @@ def render_modify_panel(selected_well, selected_row, overrides, kit_name, accept
     new_target = st.selectbox("target", options=target_options, index=target_index,
                                key=f"edit_target_{selected_well}")
 
-    new_ct    = st.text_input("ct", value=current_ct, key=f"edit_ct_{selected_well}")
+
     new_indok = st.text_area("Módosítás indoka *", value=current_indok,
                               key=f"edit_indok_{selected_well}", help="Kötelező mező a mentéshez")
 
@@ -107,7 +106,6 @@ def render_modify_panel(selected_well, selected_row, overrides, kit_name, accept
                 st.session_state["manual_overrides"][selected_well] = {
                     "final_result":     new_final,
                     "target":           new_target,
-                    "ct":               new_ct,
                     "módosítás indoka": new_indok
                 }
                 if selected_well in st.session_state[accepted_wells_key]:
